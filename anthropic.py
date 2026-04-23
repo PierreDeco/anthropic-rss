@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 
 try:
     from dotenv import load_dotenv
+
     load_dotenv()
 except ImportError:
     pass
@@ -54,7 +55,10 @@ def build_rss_feed():
     soup = BeautifulSoup(response.text, features="html.parser")
     table = soup.find("ul", class_=CSS_LIST_CLASS)
     if table is None:
-        logger.error("RSS list element not found — the page structure may have changed (CSS_LIST_CLASS=%s)", CSS_LIST_CLASS)
+        logger.error(
+            "RSS list element not found — the page structure may have changed (CSS_LIST_CLASS=%s)",
+            CSS_LIST_CLASS,
+        )
         sys.exit(1)
 
     for row in table.find_all("a"):
@@ -76,7 +80,9 @@ def build_rss_feed():
         logger.error("Failed to write RSS feed to %s: %s", output_path, exc)
         sys.exit(1)
 
-    logger.info("RSS feed written to %s (%d items)", output_path, len(table.find_all("a")))
+    logger.info(
+        "RSS feed written to %s (%d items)", output_path, len(table.find_all("a"))
+    )
 
 
 if __name__ == "__main__":
